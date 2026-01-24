@@ -11,4 +11,4 @@ Route::get('/', function ()
 Route::get('/profil', [ProfileController::class, 'index']);
 
 use App\Http\Controllers\ProdukController;
-Route::get('/produk', [ProdukController::class, 'show']);
+Route::get('/produk', [ProdukController::class, 'urut']);

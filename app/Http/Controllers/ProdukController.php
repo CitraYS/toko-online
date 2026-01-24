@@ -7,10 +7,20 @@ use Illuminate\Http\Request;
 
 class ProdukController extends Controller
 {
-    public function show()
+    public function utama()
+    {
+        // Mengambil SEMUA data di tabel products
+        $products = \App\Models\Produk::all();
+
+        // Debugging: Cek apakah data berhasil diambil
+        dd($products);
+        //return view('produk.index', compact('data_produk'));
+    }
+
+    public function show($id)
     {
         // Cari produk berdasarkan ID (misal: products/1)
-        $product = Produk::find(1);
+        $product = \App\Models\Produk::find($id);
 
         // Jika ID ngawur (tidak ketemu), tampilkan 404
         if (!$product) {
@@ -19,5 +29,14 @@ class ProdukController extends Controller
 
         // Cek apakah data produk yang diambil sudah benar
         dd($product);
+    }
+
+    public function urut()
+    {
+        // latest() = orderBy('created_at', 'desc')
+        $products = \App\Models\Produk::latest()->get();
+
+        // Cek urutan array, pastikan ID terbesar ada di index 0
+        dd($products);
     }
 }
