@@ -51,4 +51,13 @@ class ProdukController extends Controller
 
         dd($product); // Cek: Harus muncul 1 Object, bukan Array
     }
+
+    public function urut()
+    {
+        // latest() = orderBy('created_at', 'desc')
+        $products = \App\Models\Produk::latest()->get();
+
+        // Cek urutan array, pastikan ID terbesar ada di index 0
+        dd($products);
+    }
 }
