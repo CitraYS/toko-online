@@ -14,22 +14,33 @@ class ProdukController extends Controller
         return view('produk.create');
     }
 
+    // 2. Method POST: Menerima & Memproses Data (Simpan)
     public function store(Request $request)
     {
-        // A. Validasi (Security Guard)
-        // Pastikan data sesuai aturan sebelum masuk database
+        // A. Validasi
+        // PENTING: Jika validasi ini gagal, Laravel otomatis "Reload" halaman.
+        // Code di bawahnya (try-catch) TIDAK AKAN dijalankan.
         $request->validate([
             'name' => 'required|min:3',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
         ]);
 
-        // B. Simpan ke Database (Cara Cepat / Mass Assignment)
-        // Product::create otomatis mencocokkan nama input form dengan nama kolom tabel
-        Produk::create($request->all());
+        try {
+            // B. Coba Simpan ke Database
+            Product::create($request->all());
 
-        // C. Redirect (Kembalikan ke halaman index)
-        return redirect('/products')->with('success', 'Produk berhasil ditambahkan!');
+            // C. Jika Berhasil, Redirect
+            return redirect('/products')->with('success', 'Produk berhasil ditambahkan!');
+            
+        } catch (\Exception $e) {
+            // D. Jika Gagal (Database Error), Tangkap errornya
+            // dd($e->getMessage()); // Debugging: Lihat pesan error di layar hitam
+            
+            return redirect()->back()
+                ->with('error', 'Terjadi kesalahan sistem: ' . $e->getMessage())
+                ->withInput(); // withInput() berguna agar inputan tidak hilang
+        }
     }
 
     public function lihat()
