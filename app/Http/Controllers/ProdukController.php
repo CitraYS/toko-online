@@ -8,7 +8,7 @@ use App\Models\Produk; // Pastikan Model sudah di-import
 
 class ProdukController extends Controller
 {
-
+    // 1. Tambah data
     public function create()
     {
         return view('produk.create');
@@ -21,17 +21,19 @@ class ProdukController extends Controller
         // PENTING: Jika validasi ini gagal, Laravel otomatis "Reload" halaman.
         // Code di bawahnya (try-catch) TIDAK AKAN dijalankan.
         $request->validate([
+            'categories_id' => 'required',
             'name' => 'required|min:3',
-            'price' => 'required|numeric',
-            'stock' => 'required|integer',
+            'price' => 'required',
+            'stock' => 'required|numeric',
+            'deskripsi' => 'required',
         ]);
 
         try {
             // B. Coba Simpan ke Database
-            Product::create($request->all());
+            Produk::create($request->all());
 
             // C. Jika Berhasil, Redirect
-            return redirect('/products')->with('success', 'Produk berhasil ditambahkan!');
+            return redirect('/produk/lihat')->with('success', 'Produk berhasil ditambahkan!');
             
         } catch (\Exception $e) {
             // D. Jika Gagal (Database Error), Tangkap errornya
@@ -43,6 +45,37 @@ class ProdukController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        $product = Produk::find($id);
+        return view('produk.edit', compact('product'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        // 1. Cari Produknya dulu
+        $product = Produk::find($id);
+
+        // 2. Validasi & Update
+        // (Cara update massal, mirip create)
+        $product->update($request->all());
+
+        return redirect('/produk/lihat')->with('success', 'Produk berhasil diupdate!');
+    }
+
+    public function viewHapus($id)
+    {
+        $product = Produk::find($id);
+        return view('produk.hapus', compact('product'));
+    }
+
+    public function destroy($id)
+    {
+        $product = Produk::find($id);
+        $product->delete();
+        return redirect('/produk/lihat');
+    }
+
     public function lihat()
     {
         $shopName = "Toko Sembako Jaya"; // Data Tunggal (String)
@@ -50,7 +83,7 @@ class ProdukController extends Controller
         
         return view('produk.index', compact('shopName', 'products'));
     }
-    
+
     // 1. INDEX: Mengambil Banyak Data (All/Latest + Relasi)
     public function index()
     {

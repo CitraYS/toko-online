@@ -1,7 +1,7 @@
 <?php
-
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\KategoriController;
 
 Route::get('/', function () 
     { 
@@ -28,6 +28,18 @@ Route::get('/produk/unggulan', [ProdukController::class, 'featured']);
 // PENTING: Taruh ini paling bawah agar tidak memblokir route lain
 Route::get('/produk', [ProdukController::class, 'index']);
 Route::get('/produk/lihat', [ProdukController::class, 'lihat']);
+Route::get('/produk/tambah', [ProdukController::class, 'create']); // Tampil Form
+Route::post('/produk_simpan', [ProdukController::class, 'store']); // Proses Simpan
+Route::get('/produk/{id}/edit', [ProdukController::class, 'edit']);
+Route::put('/produk_update/{id}', [ProdukController::class, 'update']);
+Route::get('/produk/{id}/hapus', [ProdukController::class, 'viewHapus']);
+Route::delete('/produk_hapus/{id}', [ProdukController::class, 'destroy']);
 
-Route::get('/products/create', [ProdukController::class, 'create']); // Tampil Form
-Route::post('/products', [ProdukController::class, 'store']); // Proses Simpan
+Route::get('/kategori', [KategoriController::class, 'index']);
+Route::get('/kategori/lihat', [KategoriController::class, 'lihat']);
+Route::get('/kategori/tambah', [KategoriController::class, 'create']); // Tampil Form
+Route::post('/kategori_simpan', [KategoriController::class, 'store']); // Proses Simpan
+Route::get('/kategori/{id}/edit', [KategoriController::class, 'edit']);
+Route::put('/kategori_update/{id}', [KategoriController::class, 'update']);
+Route::get('/kategori/{id}/hapus', [KategoriController::class, 'viewHapus']);
+Route::delete('/kategori_hapus/{id}', [KategoriController::class, 'destroy']);

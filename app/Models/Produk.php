@@ -8,6 +8,8 @@ class Produk extends Model
 {
     public $timestamps = false;
        protected $fillable = [
-        'category_id', 'name', 'price', 'stock'
+        'categories_id', 'name', 'price', 'stock', 'deskripsi'
     ];
+    
 }
+
